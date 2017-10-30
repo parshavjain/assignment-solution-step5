@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /*
  * implementation of DataTypeDefinitions class. This class contains a method getDataTypes() 
@@ -19,30 +20,81 @@ import java.util.Date;
  */
 public class DataTypeDefinitions {
 
-	//method stub
-	public static Object getDataType(String input) {
-	
-		// checking for Integer
-		
-		// checking for floating point numbers
-		
-		// checking for date format dd/mm/yyyy
-		
-		// checking for date format mm/dd/yyyy
-		
-		// checking for date format dd-mon-yy
-		
-		// checking for date format dd-mon-yyyy
-		
-		// checking for date format dd-month-yy
-		
-		// checking for date format dd-month-yyyy
-		
-		// checking for date format yyyy-mm-dd
-		
-		return null;
-	}
-	
+	// Regular Expression for determining Integer value.
+	private static final String INT_REGEX = "^[0-9]+$";
 
-	
+	// Regular Expression for determining Float value.
+	private static final String FLOAT_REGEX = "[+-]?([0-9]*[.])[0-9]+";
+
+	// Regular Expression for determining vaious Date Formats.
+	// checking for date format dd/mm/yyyy
+	private static final String ddmmyyyy_REGEX = "(([12][0-9]|3[01]|0?[1-9])/(0?[1-9]|1[012])/(?:19|20)[0-9]{1}[0-9]{1})";
+	// checking for date format mm/dd/yyyy
+	private static final String mmddyyyy_REGEX = "((0?[1-9]|1[012])/([12][0-9]|3[01]|0?[1-9])/(?:19|20)[0-9]{1}[0-9]{1})";
+	// date format dd-mon-yy
+	private static final String dd_mon_yy_REGEX = "(([12][0-9]|3[01]|0?[1-9])-([a-z]{3})-(?)[0-9]{1}[0-9]{1})";
+	// date format dd-mon-yyyy
+	private static final String dd_mon_yyyy_REGEX = "(([12][0-9]|3[01]|0?[1-9])-([a-z]{3})-(?:19|20)[0-9]{1}[0-9]{1})";
+	// date format dd-month-yy
+	private static final String dd_month_yy_REGEX = "(([12][0-9]|3[01]|0?[1-9])-([a-z])-(?)[0-9]{1}[0-9]{1})";
+	// date format dd-month-yyyy
+	private static final String dd_month_yyyy_REGEX = "(([12][0-9]|3[01]|0?[1-9])-([a-z])-(?:19|20)[0-9]{1}[0-9]{1})";
+	// date format yyyy-mm-dd
+	private static final String yyyymmdd_REGEX = "((?:19|20)[0-9]{1}[0-9]{1})-(0?[1-9]|1[012])-([12][0-9]|3[01]|0?[1-9])";
+
+	// method stub
+	public static Object getDataType(String input) {
+		if (null == input || input.isEmpty()) {
+			// System.out.println("matched Object");
+			return Object.class;
+		}
+		// checking for Integer
+		if (Pattern.matches(INT_REGEX, input)) {
+
+			// System.out.println("matched Integer");
+			return Integer.class;
+		}
+		// checking for floating point numbers
+		if (Pattern.matches(FLOAT_REGEX, input)) {
+			// System.out.println("matched float");
+			return Float.class;
+		}
+		// checking for date format dd/mm/yyyy
+		if (Pattern.matches(ddmmyyyy_REGEX, input)) {
+			// System.out.println("matched date");
+			return Date.class;
+		}
+		// checking for date format mm/dd/yyyy
+		if (Pattern.matches(mmddyyyy_REGEX, input)) {
+			// System.out.println("matched date");
+			return Date.class;
+		}
+		// checking for date format dd-mon-yy
+		if (Pattern.matches(dd_mon_yy_REGEX, input)) {
+			// System.out.println("matched date");
+			return Date.class;
+		}
+		// checking for date format dd-mon-yyyy
+		if (Pattern.matches(dd_mon_yyyy_REGEX, input)) {
+			// System.out.println("matched date");
+			return Date.class;
+		}
+		// checking for date format dd-month-yy
+		if (Pattern.matches(dd_month_yy_REGEX, input)) {
+			// System.out.println("matched date");
+			return Date.class;
+		}
+		// checking for date format dd-month-yyyy
+		if (Pattern.matches(dd_month_yyyy_REGEX, input)) {
+			// System.out.println("matched date");
+			return Date.class;
+		}
+		// checking for date format yyyy-mm-dd
+		if (Pattern.matches(yyyymmdd_REGEX, input)) {
+			// System.out.println("matched date");
+			return Date.class;
+		}
+		// System.out.println("matched String");
+		return String.class;
+	}
 }

@@ -1,6 +1,7 @@
 package com.stackroute.datamunger;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import com.stackroute.datamunger.query.Query;
 import com.stackroute.datamunger.writer.JsonWriter;
@@ -8,18 +9,20 @@ import com.stackroute.datamunger.writer.JsonWriter;
 
 public class DataMunger {
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 		
 		String queryString=null;
 		//read the query from the user
-		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		queryString = br.readLine();
 		
 		
 		
 		/*
 		 * Instantiate Query class. This class is responsible for: 
 		 * 1. Parsing the query
-		 * 2. Select the appropriate type of query processor 3. Get the resultSet which
+		 * 2. Select the appropriate type of query processor 
+		 * 3. Get the resultSet which
 		 * is populated by the Query Processor
 		 */
 		Query query=new Query();

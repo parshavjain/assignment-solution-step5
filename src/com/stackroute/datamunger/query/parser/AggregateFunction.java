@@ -5,16 +5,30 @@ package com.stackroute.datamunger.query.parser;
  * */
 public class AggregateFunction {
 
-	public String getFunction() {
-		// TODO Auto-generated method stub
-		return null;
+	private String aggregateName;
+	private String aggregateValue;
+
+	/**
+	 * @param aggregateName
+	 *            the aggregateName to set
+	 */
+	public void setAggregateName(String aggregateName) {
+		this.aggregateName = aggregateName;
+	}
+
+	/**
+	 * @param aggregateValue
+	 *            the aggregateValue to set
+	 */
+	public void setAggregateValue(String aggregateValue) {
+		this.aggregateValue = aggregateValue;
 	}
 
 	public String getField() {
-		// TODO Auto-generated method stub
-		return null;
+		return aggregateValue;
 	}
-	
-	
 
+	public String getFunction() {
+		return aggregateName;
+	}
 }
