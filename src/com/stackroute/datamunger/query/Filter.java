@@ -24,7 +24,8 @@ public class Filter {
 		if (null != queryParameter.getRestrictions() && !queryParameter.getRestrictions().isEmpty()) {
 			int index = null != queryParameter.getLogicalOperators() ? queryParameter.getLogicalOperators().size() - 1 : 0;
 			String logicalOp = "or";			
-			for (Restriction restriction : queryParameter.getRestrictions()) {
+			for (int i = queryParameter.getRestrictions().size() - 1; i >= 0; i--) {
+				Restriction restriction = queryParameter.getRestrictions().get(i);
 				boolean result = false;
 				String value = row.get(restriction.getPropertyName());
 				switch (restriction.getCondition()) {
