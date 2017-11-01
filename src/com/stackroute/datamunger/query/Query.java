@@ -5,29 +5,28 @@ import java.util.HashMap;
 import com.stackroute.datamunger.query.parser.QueryParameter;
 import com.stackroute.datamunger.query.parser.QueryParser;
 import com.stackroute.datamunger.reader.CsvQueryProcessor;
-import com.stackroute.datamunger.reader.QueryProcessingEngine;
 
+/**
+ * Class contains logic to fetch query.
+ * 
+ */
 public class Query {
 
-	/*
+	/**
 	 * This method will: 
 	 * 1.parse the query and populate the QueryParameter object
 	 * 2.Based on the type of query, it will select the appropriate Query processor.
-	 * 
-	 * In this example, we are going to work with only one Query Processor which is
-	 * CsvQueryProcessor, which can work with select queries containing zero, one or
-	 * multiple conditions
 	 */
-	public HashMap executeQuery(String queryString) {
+	public HashMap<Long, Row> executeQuery(final String queryString) {
 	
 		/* instantiate QueryParser class */
-		QueryParser queryParser = new QueryParser();
+		final QueryParser queryParser = new QueryParser();
 		
 		/*
 		 * call parseQuery() method of the class by passing the queryString which will
 		 * return object of QueryParameter
 		 */
-		QueryParameter queryParameter = queryParser.parseQuery(queryString);
+		final QueryParameter queryParameter = queryParser.parseQuery(queryString);
 		
 		/*
 		 * Check for Type of Query based on the QueryParameter object. In this
@@ -43,10 +42,9 @@ public class Query {
 		 * which is a HashMap
 		 */
 		
-		CsvQueryProcessor csvQueryProcessor = new CsvQueryProcessor();
-		DataSet dataSet = csvQueryProcessor.getResultSet(queryParameter);
+		final CsvQueryProcessor csvQueryProcessor = new CsvQueryProcessor();
 	
-		return dataSet;
+		return csvQueryProcessor.getResultSet(queryParameter);
 	}
 
 }

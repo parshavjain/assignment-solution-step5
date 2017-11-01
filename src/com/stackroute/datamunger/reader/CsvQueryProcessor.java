@@ -156,8 +156,9 @@ public class CsvQueryProcessor implements QueryProcessingEngine {
 	public String[] getColumnType(String[] data) {
 		List<String> dataTypes = new ArrayList<String>();
 		if (null != data) {
+			final DataTypeDefinitions dataTypeDefinitions = new DataTypeDefinitions();
 			for (String string : data) {
-				dataTypes.add(DataTypeDefinitions.getDataType(string).toString().split("class ")[1]);
+				dataTypes.add(dataTypeDefinitions.getDataType(string).toString().split("class ")[1]);
 			}
 			return dataTypes.toArray(new String[dataTypes.size()]);
 		}
