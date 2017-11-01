@@ -3,22 +3,64 @@ package com.stackroute.datamunger.query.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-/* 
- * This class will contain the elements of the parsed Query String such as conditions,
- * logical operators,aggregate functions, file name, fields group by fields, order by
- * fields, Query Type
- * */
+/** 
+ * This class will contain the elements of the parsed Query String.
+ */
 public class QueryParameter {
 
+	/**
+	 * contains File Name.
+	 */
 	private String file;
+	
+	/**
+	 * Contains base part of query.
+	 */
 	private String baseQuery;
-	private List<String> fields;
-	private String QUERY_TYPE;
+	
+	/**
+	 * contains all the fields of query.
+	 */
+	private transient List<String> fields;
+	
+	/**
+	 * contains type of query.
+	 */
+	final private String QUERY_TYPE;
+	
+	/**
+	 * Contains Restriction.
+	 */
 	private List<Restriction> restrictions;
+	
+	/**
+	 * Contains Logical operator.
+	 */
 	private List<String> logicalOperators;
-	private List<AggregateFunction> aggregateFunctions;
-	private List<String> orderByFields;
-	private List<String> groupByFields;
+	
+	/**
+	 * contains Aggregate functions.
+	 */
+	private transient List<AggregateFunction> aggregateFunc;
+	
+	/**
+	 * Contains Order By Fields.
+	 */
+	private transient List<String> orderByFields;
+	
+	/**
+	 * Contains Group by Fields.
+	 */
+	private transient List<String> groupByFields;
+	
+	/**
+	 * @param queryType
+	 *            the queryType to set
+	 */
+	public QueryParameter(final String queryType) {
+		// TODO Auto-generated constructor stub
+		this.QUERY_TYPE = queryType;
+	}
 
 	/**
 	 * @return the file
@@ -31,7 +73,7 @@ public class QueryParameter {
 	 * @param file
 	 *            the file to set
 	 */
-	public void setFile(String file) {
+	public void setFile(final String file) {
 		this.file = file;
 	}
 
@@ -46,7 +88,7 @@ public class QueryParameter {
 	 * @param baseQuery
 	 *            the baseQuery to set
 	 */
-	public void setBaseQuery(String baseQuery) {
+	public void setBaseQuery(final String baseQuery) {
 		this.baseQuery = baseQuery;
 	}
 
@@ -55,14 +97,6 @@ public class QueryParameter {
 	 */
 	public String getQUERY_TYPE() {
 		return QUERY_TYPE;
-	}
-
-	/**
-	 * @param qUERY_TYPE
-	 *            the qUERY_TYPE to set
-	 */
-	public void setQUERY_TYPE(String qUERY_TYPE) {
-		QUERY_TYPE = qUERY_TYPE;
 	}
 
 	/**
@@ -86,7 +120,7 @@ public class QueryParameter {
 	 * @param restrictions
 	 *            the restrictions to set
 	 */
-	public void setRestrictions(List<Restriction> restrictions) {
+	public void setRestrictions(final List<Restriction> restrictions) {
 		this.restrictions = restrictions;
 	}
 
@@ -101,7 +135,7 @@ public class QueryParameter {
 	 * @param logicalOperators
 	 *            the logicalOperators to set
 	 */
-	public void setLogicalOperators(List<String> logicalOperators) {
+	public void setLogicalOperators(final List<String> logicalOperators) {
 		this.logicalOperators = logicalOperators;
 	}
 
@@ -109,10 +143,10 @@ public class QueryParameter {
 	 * @return the aggregateFunctions
 	 */
 	public List<AggregateFunction> getAggregateFunctions() {
-		if (null == this.aggregateFunctions) {
-			this.aggregateFunctions = new ArrayList<AggregateFunction>();
+		if (null == this.aggregateFunc) {
+			this.aggregateFunc = new ArrayList<AggregateFunction>();
 		}
-		return aggregateFunctions;
+		return aggregateFunc;
 	}
 
 	/**
@@ -133,5 +167,33 @@ public class QueryParameter {
 			this.groupByFields = new ArrayList<String>();
 		}
 		return this.groupByFields;
+	}
+
+	/**
+	 * @param fields the fields to set
+	 */
+	public void setFields(final List<String> fields) {
+		this.fields = fields;
+	}
+
+	/**
+	 * @param orderByFields the orderByFields to set
+	 */
+	public void setOrderByFields(final List<String> orderByFields) {
+		this.orderByFields = orderByFields;
+	}
+
+	/**
+	 * @param groupByFields the groupByFields to set
+	 */
+	public void setGroupByFields(final List<String> groupByFields) {
+		this.groupByFields = groupByFields;
+	}
+
+	/**
+	 * @param aggregateFunc the aggregateFunc to set
+	 */
+	public void setAggregateFunc(final List<AggregateFunction> aggregateFunc) {
+		this.aggregateFunc = aggregateFunc;
 	}
 }

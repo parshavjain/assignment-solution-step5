@@ -4,71 +4,84 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class contains parsing logic.
+ * 
+ * @author PARSAV
+ *
+ */
 public class QueryParser {
 
-	// Regex for white space.
+	/**
+	 * Regex for white space.
+	 */
 	private static final String WHITE_SPACE = "\\s+";
-	// Regex for Non word characters.
-	private static final String NON_WORD_CHARACTER = "\\w+";
-	// Regex for logical operators.
+
+	/**
+	 * Regex for Non word characters.
+	 */
+	private static final String NON_WORD_CHAR = "\\w+";
+
+	/**
+	 * Regex for logical operators.
+	 */
 	private static final String LOGICAL_OPERATORS = "\\s+and\\s+|\\s+or\\s+|\\s+not\\s+";
 
-	/*
+	/**
 	 * this method will parse the queryString and will return the object of
 	 * QueryParameter class
 	 */
-	public QueryParameter parseQuery(String queryString) {
-		if (null == queryString || queryString.isEmpty()) {
-			return null;
-		}
+	public QueryParameter parseQuery(final String queryString) {
+		final QueryParameter queryParameter = new QueryParameter("CSV Query");
+		if (null != queryString && !queryString.isEmpty()) {
 
-		QueryParameter queryParameter = new QueryParameter();
+			/*
+			 * extract the name of the file from the query. File name can be found after the
+			 * "from" clause.
+			 */
+			final String file = this.getFile(queryString);
+			queryParameter.setFile(file);
 
-		/*
-		 * extract the name of the file from the query. File name can be found after the
-		 * "from" clause.
-		 */
-		queryParameter.setFile(this.getFile(queryString));
+			// extract baseQuery
+			final String baseQuery = this.getBaseQuery(queryString);
+			if (null != baseQuery) {
+				queryParameter.setBaseQuery(baseQuery);
+			}
+			// extract fields
+			final List<String> fields = this.getFields(queryString);
+			if (null != fields) {
+				queryParameter.setFields(fields);
+			}
 
-		//extract baseQuery
-		String baseQuery = this.getBaseQuery(queryString);
-		if(null != baseQuery) {
-			queryParameter.setBaseQuery(baseQuery);
-		}
-		// extract fields
-		List<String> fields = this.getFields(queryString);
-		if (null != fields) {
-			queryParameter.getFields().addAll(fields);
-		}
+			// extract the order by fields from the query string.
+			final List<String> orderByFields = this.getOrderByFields(queryString);
+			if (null != orderByFields) {
+				queryParameter.setOrderByFields(orderByFields);
+			}
 
-		// extract the order by fields from the query string.
-		List<String> orderByFields = this.getOrderByFields(queryString);
-		if (null != orderByFields) {
-			queryParameter.getOrderByFields().addAll(orderByFields);
-		}
+			// extract the group by fields from the query string.
+			final List<String> groupByFields = this.getGroupByFields(queryString);
+			if (null != groupByFields) {
+				queryParameter.setGroupByFields(groupByFields);
+			}
 
-		// extract the group by fields from the query string.
-		List<String> groupByFields = this.getGroupByFields(queryString);
-		if (null != groupByFields) {
-			queryParameter.getGroupByFields().addAll(groupByFields);
-		}
+			// Extracting Conditions.
+			final List<Restriction> restrictionList = this.getConditions(queryString);
+			if (null != restrictionList) {
+				queryParameter.setRestrictions(restrictionList);
+			}
 
-		// Extracting Conditions.
-		List<Restriction> restrictionList = this.getConditions(queryString);
-		if (null != restrictionList) {
-			queryParameter.setRestrictions(restrictionList);
-		}
+			// Extracting logical Operators
+			final List<String> operatorsList = this.getLogicalOperators(queryString);
+			if (null != operatorsList) {
+				queryParameter.setLogicalOperators(operatorsList);
+			}
 
-		// Extracting logical Operators
-		List<String> operatorsList = this.getLogicalOperators(queryString);
-		if (null != operatorsList) {
-			queryParameter.setLogicalOperators(operatorsList);
-		}
-
-		// Extracting Aggregate functions.
-		List<AggregateFunction> aggregateList = this.getAggregateFunctions(queryString);
-		if (null != aggregateList) {
-			queryParameter.getAggregateFunctions().addAll(aggregateList);
+			// Extracting Aggregate functions.
+			final List<AggregateFunction> aggregateList = this.getAggregateFunctions(queryString);
+			if (null != aggregateList) {
+				queryParameter.setAggregateFunc(aggregateList);
+			}
 		}
 		return queryParameter;
 	}
@@ -182,20 +195,17 @@ public class QueryParser {
 		String[] strArray = conditionQuery.split(LOGICAL_OPERATORS);
 		List<Restriction> list = new ArrayList<Restriction>();
 		for (String str : strArray) {
-			Restriction restriction = new Restriction();
 			str = str.replaceAll(WHITE_SPACE, "");
 			str = str.replaceAll("'", "");
-			String[] nonWordCharArray = str.split(NON_WORD_CHARACTER);
+			String[] nonWordCharArray = str.split(NON_WORD_CHAR);
 			if (null != nonWordCharArray && nonWordCharArray.length > 1) {
 				String nonWordChar = nonWordCharArray[1];
-				String alphaArray[] = str.split(nonWordChar);
+				final String alphaArray[] = str.split(nonWordChar);
 				if (null != alphaArray && alphaArray.length > 1) {
-					restriction.setPropertyName(alphaArray[0]);
-					restriction.setPropertyValue(alphaArray[1]);
+					Restriction restriction = new Restriction(alphaArray[0], alphaArray[1], nonWordChar);
+					// System.out.println(restriction.toString());
+					list.add(restriction);
 				}
-				restriction.setCondition(nonWordChar);
-				// System.out.println(restriction.toString());
-				list.add(restriction);
 			}
 		}
 		return list;
@@ -251,12 +261,10 @@ public class QueryParser {
 				String[] aggregateArr = beforeFromQuery.split(",");
 				if (null != aggregateArr) {
 					for (int j = 0; j < aggregateArr.length; j++) {
-						AggregateFunction aggregateFunction = new AggregateFunction();
 						String[] splittedStr = aggregateArr[j].split("\\(");
 						if (null != splittedStr && splittedStr.length > 1) {
-							aggregateFunction.setAggregateName(splittedStr[0]);
-							aggregateFunction
-									.setAggregateValue(splittedStr[1].substring(0, splittedStr[1].length() - 1));
+							AggregateFunction aggregateFunction = new AggregateFunction(splittedStr[0],
+									splittedStr[1].substring(0, splittedStr[1].length() - 1));
 							aggregateList.add(aggregateFunction);
 						}
 					}
@@ -278,7 +286,7 @@ public class QueryParser {
 			String afterWhere = queryString.split("\\s+where\\s+")[1];
 			if (afterWhere.contains(" order by ")) {
 				return afterWhere.split("\\s+order by\\s+")[0];
-			} 
+			}
 			if (afterWhere.contains(" group by ")) {
 				return afterWhere.split("\\s+group by\\s+")[0];
 			}
@@ -286,7 +294,7 @@ public class QueryParser {
 		}
 		return null;
 	}
-	
+
 	public String getBaseQuery(String queryString) {
 		String baseQuery = null;
 		baseQuery = queryString.split("where")[0];
