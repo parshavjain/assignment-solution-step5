@@ -1,6 +1,7 @@
 package com.stackroute.datamunger;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 import com.stackroute.datamunger.query.Query;
@@ -9,13 +10,18 @@ import com.stackroute.datamunger.writer.JsonWriter;
 
 public class DataMunger {
 	
-	public static void main(String[] args) throws Exception{
+	//Main method Call.
+	public static void main(final String[] args) {
 		
 		String queryString=null;
+		try {
 		//read the query from the user
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		queryString = br.readLine();
-		
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		queryString = reader.readLine();
+		} catch (IOException ex) {
+			// TODO: handle exception
+			System.err.format("IOException occured: {}", ex);
+		}
 		
 		
 		/*
@@ -37,9 +43,7 @@ public class DataMunger {
 		 * resultSet as parameter to writeToJson() method of JsonWriter class to write
 		 * the resultSet into a JSON file
 		 */
-		if(writer.writeToJson(query.executeQuery(queryString))) {
-			System.out.println("Output written to data/result.json");
-		}
+		writer.writeToJson(query.executeQuery(queryString));
 
 	}
 }

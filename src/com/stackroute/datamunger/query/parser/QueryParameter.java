@@ -13,7 +13,7 @@ public class QueryParameter {
 	private String file;
 	private String baseQuery;
 	private List<String> fields;
-	private String QUERY_TYPE;
+	private String queryType;
 	private List<Restriction> restrictions;
 	private List<String> logicalOperators;
 	private List<AggregateFunction> aggregateFunctions;
@@ -53,16 +53,16 @@ public class QueryParameter {
 	/**
 	 * @return the qUERY_TYPE
 	 */
-	public String getQUERY_TYPE() {
-		return QUERY_TYPE;
+	public String getQueryType() {
+		return queryType;
 	}
 
 	/**
 	 * @param qUERY_TYPE
 	 *            the qUERY_TYPE to set
 	 */
-	public void setQUERY_TYPE(String qUERY_TYPE) {
-		QUERY_TYPE = qUERY_TYPE;
+	public void setQueryType(String queryType) {
+		this.queryType = queryType;
 	}
 
 	/**

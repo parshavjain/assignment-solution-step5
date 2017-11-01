@@ -63,7 +63,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testGetFileName(): File name extraction failed. Check getFile() method. File name can be found after a space after from clause. Note: CSV file can contain a field that contains from as a part of the column name. For eg: from_date,from_hrs etc",
 				"data/ipl.csv", queryParameter.getFile());
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -73,7 +72,6 @@ public class DataMungerTest {
 		assertNotEquals(
 				"testGetFileNameFailure(): File name extraction failed. Check getFile() method. File name can be found after a space after from clause. Note: CSV file can contain a field that contains from as a part of the column name. For eg: from_date,from_hrs etc",
 				"data/ipl.csv", queryParameter.getFile());
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -88,7 +86,6 @@ public class DataMungerTest {
 		assertArrayEquals(
 				"testGetFields() : Select fields extractions failed. The query string can have multiple fields separated by comma after the 'select' keyword. The extracted fields is supposed to be stored in a String array which is to be returned by the method getFields(). Check getFields() method",
 				expectedFields.toArray(), queryParameter.getFields().toArray());
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -98,7 +95,6 @@ public class DataMungerTest {
 		assertNotNull(
 				"testGetFieldsFailure() : Invalid Column / Field values. Please note that the query string can have multiple fields separated by comma after the 'select' keyword. The extracted fields is supposed to be stored in a String array which is to be returned by the method getFields(). Check getFields() method",
 				queryParameter.getFields());
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -130,8 +126,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testGetFieldsAndRestrictions() : Retrieval of conditions part failed. The conditions part contains starting from where keyword till the next keyword, which is either group by or order by clause. In case of absence of both group by and order by clause, it will contain till the end of the query string. ",
 				true, status);
-
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -142,8 +136,6 @@ public class DataMungerTest {
 		assertNotNull(
 				"testGetFieldsAndRestrictionsFailure() : Hint: extract the conditions from the query string(if exists). for each condition, we need to capture the following: 1. Name of field, 2. condition, 3. value, please note the query might contain multiple conditions separated by OR/AND operators",
 				restrictions);
-
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -215,8 +207,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testGetRestrictionsAndAggregateFunctions() : Retrieval of Logical Operators failed. AND/OR keyword will exist in the query only if where conditions exists and it contains multiple conditions.The extracted logical operators will be stored in a String array which will be returned by the method. Please note that AND/OR can exist as a substring in the conditions as well. For eg: name='Alexander',color='Red' etc.",
 				logicalop, queryParameter.getLogicalOperators());
-
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -278,9 +268,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testGetGroupByOrderByClause() : Hint: Please note that we will need to extract the field(s) after 'order by' clause in the query, if at all the order by clause exists",
 				orderByFields, queryParameter.getOrderByFields());
-
-		display(queryString, queryParameter);
-
 	}
 
 	@Test
@@ -297,8 +284,6 @@ public class DataMungerTest {
 		assertNotNull(
 				"testGetGroupByOrderByClauseFailure() : Hint: extract the conditions from the query string(if exists). for each condition, we need to capture the following: 1. Name of field, 2. condition, 3. value, please note the query might contain multiple conditions separated by OR/AND operators",
 				restrictions);
-
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -330,9 +315,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testGetGroupByClause() : Logical Operators should be null. AND/OR keyword will exist in the query only if where conditions exists and it contains multiple conditions.The extracted logical operators will be stored in a String array which will be returned by the method. Please note that AND/OR can exist as a substring in the conditions as well. For eg: name='Alexander',color='Red' etc",
 				null, queryParameter.getLogicalOperators());
-
-		display(queryString, queryParameter);
-
 	}
 
 	@Test
@@ -388,9 +370,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testGetOrderByAndWhereConditionClause() : Hint: Please note that we will need to extract the field(s) after 'order by' clause in the query, if at all the order by clause exists",
 				orderByFields, queryParameter.getOrderByFields());
-
-		display(queryString, queryParameter);
-
 	}
 
 	@Test
@@ -404,7 +383,6 @@ public class DataMungerTest {
 		assertNotNull(
 				"testGetOrderByAndWhereConditionClauseFailure() :Hint: Please note that we will need to extract the field(s) after 'order by' clause in the query, if at all the order by clause exists.",
 				queryParameter.getOrderByFields());
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -429,7 +407,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testGetOrderByClause() : Hint: Please note that we will need to extract the field(s) after 'order by' clause in the query, if at all the order by clause exists",
 				orderByFields, queryParameter.getOrderByFields());
-		display(queryString, queryParameter);
 	}
 
 	@Test
@@ -454,74 +431,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testGetOrderByClause() : Hint: Please note that we will need to extract the field(s) after 'order by' clause in the query, if at all the order by clause exists",
 				orderByFields, queryParameter.getOrderByFields());
-
-		display(queryString, queryParameter);
-
-	}
-
-	private void display(String queryString, QueryParameter queryParameter) {
-		System.out.println("\nQuery : " + queryString);
-		System.out.println("--------------------------------------------------");
-		System.out.println("Base Query:" + queryParameter.getBaseQuery());
-		System.out.println("File:" + queryParameter.getFile());
-		System.out.println("Query Type:" + queryParameter.getQUERY_TYPE());
-		List<String> fields = queryParameter.getFields();
-		System.out.println("Selected field(s):");
-		if (fields == null || fields.isEmpty()) {
-			System.out.println("*");
-		} else {
-			for (String field : fields) {
-				System.out.println("\t" + field);
-			}
-		}
-
-		List<Restriction> restrictions = queryParameter.getRestrictions();
-
-		if (restrictions != null && !restrictions.isEmpty()) {
-			System.out.println("Where Conditions : ");
-			int conditionCount = 1;
-			for (Restriction restriction : restrictions) {
-				System.out.println("\tCondition : " + conditionCount++);
-				System.out.println("\t\tName : " + restriction.getPropertyName());
-				System.out.println("\t\tCondition : " + restriction.getCondition());
-				System.out.println("\t\tValue : " + restriction.getPropertyValue());
-			}
-		}
-		List<AggregateFunction> aggregateFunctions = queryParameter.getAggregateFunctions();
-		if (aggregateFunctions != null && !aggregateFunctions.isEmpty()) {
-
-			System.out.println("Aggregate Functions : ");
-			int funtionCount = 1;
-			for (AggregateFunction aggregateFunction : aggregateFunctions) {
-				System.out.println("\t Aggregate Function : " + funtionCount++);
-				System.out.println("\t\t function : " + aggregateFunction.getFunction());
-				System.out.println("\t\t  field : " + aggregateFunction.getField());
-			}
-
-		}
-
-		List<String> orderByFields = queryParameter.getOrderByFields();
-		if (orderByFields != null && !orderByFields.isEmpty()) {
-
-			System.out.println(" Order by fields : ");
-			for (String orderByField : orderByFields) {
-				System.out.println("\t " + orderByField);
-
-			}
-
-		}
-
-		List<String> groupByFields = queryParameter.getGroupByFields();
-		if (groupByFields != null && !groupByFields.isEmpty()) {
-
-			System.out.println(" Group by fields : ");
-			for (String groupByField : groupByFields) {
-				System.out.println("\t " + groupByField);
-
-			}
-
-		}
-
 	}
 
 	/*
@@ -574,9 +483,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testSelectAllWithoutWhereClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testSelectAllWithoutWhereClause", dataSet);
-
 	}
 
 	@Test
@@ -622,9 +528,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testSelectColumnsWithoutWhereClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testSelectColumnsWithoutWhereClause", dataSet);
-
 	}
 
 	@Test
@@ -673,9 +576,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testWithWhereGreaterThanClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testWithWhereGreaterThanClause", dataSet);
-
 	}
 
 	@Test
@@ -723,9 +623,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testWithWhereLessThanClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testWithWhereLessThanClause", dataSet);
-
 	}
 
 	@Test
@@ -773,9 +670,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testWithWhereLessThanOrEqualToClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testWithWhereLessThanOrEqualToClause", dataSet);
-
 	}
 
 	@Test
@@ -823,9 +717,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testWithWhereGreaterThanOrEqualToClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testWithWhereGreaterThanOrEqualToClause", dataSet);
-
 	}
 
 	@Test
@@ -875,9 +766,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testWithWhereNotEqualToClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testWithWhereNotEqualToClause", dataSet);
-
 	}
 
 	@Test
@@ -925,9 +813,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testWithWhereEqualAndNotEqualClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testWithWhereEqualAndNotEqualClause", dataSet);
-
 	}
 
 	@Test
@@ -976,9 +861,6 @@ public class DataMungerTest {
 		assertEquals(
 				"testWithWhereTwoConditionsEqualOrNotEqualClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testWithWhereTwoConditionsEqualOrNotEqualClause", dataSet);
-
 	}
 
 	@Test
@@ -1026,16 +908,5 @@ public class DataMungerTest {
 		assertEquals(
 				"testWithWhereThreeConditionsEqualOrNotEqualClause() : Total number of records are matching but the records returned does not match the expected data",
 				true, dataexpectedstatus);
-
-		display("testWithWhereThreeConditionsEqualOrNotEqualClause", dataSet);
-
 	}
-
-	private void display(String testCaseName, HashMap dataSet) {
-		System.out.println(testCaseName);
-		System.out.println("================================================================");
-		System.out.println(dataSet);
-
-	}
-
 }
