@@ -1,14 +1,19 @@
 package com.stackroute.datamunger.reader;
 
-import java.io.IOException;
-
 import com.stackroute.datamunger.query.DataSet;
-import com.stackroute.datamunger.query.DataTypeDefinitions;
-import com.stackroute.datamunger.query.Header;
 import com.stackroute.datamunger.query.parser.QueryParameter;
-
+/**
+ * 
+ * @author PARSAV
+ *
+ */
 public interface QueryProcessingEngine {
 
-	public DataSet getResultSet(QueryParameter queryParameter);
+	/**
+	 * 
+	 * @param queryParameter
+	 * @return
+	 */
+	 DataSet getResultSet(QueryParameter queryParameter);
 	
 }

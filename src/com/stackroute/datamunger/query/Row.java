@@ -18,7 +18,6 @@ public class Row extends HashMap<String, String>{
 		if (containsKey(key)) {
 			value = super.get(key);
         }
-		return value;
-		
+		return value;		
 	}
 }

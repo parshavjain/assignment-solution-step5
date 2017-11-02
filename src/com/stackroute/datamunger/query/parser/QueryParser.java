@@ -94,7 +94,8 @@ public class QueryParser {
 		String returnString = null;
 		final String[] fromSplit = queryString.split(" from ");
 		if (null != fromSplit && fromSplit.length > 1) {
-			final String[] tempStrArray = fromSplit[1].split(WHITE_SPACE);
+			final String tempStr = fromSplit[1];
+			final String[] tempStrArray = tempStr.split(WHITE_SPACE);
 			returnString = tempStrArray[0];
 		}
 		return returnString;
@@ -108,19 +109,21 @@ public class QueryParser {
 	 * "city". Please note that we can have more than one order by fields.
 	 */
 	public List<String> getOrderByFields(final String queryString) {
-		final String[] strArray = queryString.trim().split(WHITE_SPACE);
+		final List<String> list = new ArrayList<String>();
+		final String[] strArray = queryString.split(WHITE_SPACE);
 		boolean orderByFound = false;
 		for (int i = 1; i < strArray.length; i++) {
-			if (strArray[i].equalsIgnoreCase("Order") && strArray[i + 1].equalsIgnoreCase("by")) {
+			if (strArray[i].equalsIgnoreCase("Order") 
+					&& strArray[i + 1].equalsIgnoreCase("by")) {
 				orderByFound = true;
 				i++;
 				continue;
 			}
 			if (orderByFound) {
-				return new ArrayList<String>(Arrays.asList(strArray[i].split(",")));
+				list.addAll(Arrays.asList(strArray[i].split(",")));
 			}
 		}
-		return new ArrayList<String>();
+		return list;
 	}
 
 	/**

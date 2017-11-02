@@ -24,8 +24,14 @@ import com.stackroute.datamunger.query.RowDataTypeDefinitions;
 import com.stackroute.datamunger.query.parser.QueryParameter;
 import com.stackroute.datamunger.query.parser.Restriction;
 
+/**
+ * 
+ * @author PARSAV
+ *
+ */
 public class CsvQueryProcessor implements QueryProcessingEngine {
-	/*
+	
+	/**
 	 * This method will take QueryParameter object as a parameter which contains the
 	 * parsed query and will process and populate the ResultSet
 	 */
@@ -41,7 +47,7 @@ public class CsvQueryProcessor implements QueryProcessingEngine {
 		DataSet dataSetMap = null;
 		if (null != queryParameter.getFile() && !queryParameter.getFile().isEmpty()) {
 			dataSetMap = new DataSet();
-			Path filePath = FileSystems.getDefault().getPath(queryParameter.getFile());
+			final Path filePath = FileSystems.getDefault().getPath(queryParameter.getFile());
 			try {
 				BufferedReader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8);
 				String line = null;
@@ -88,11 +94,11 @@ public class CsvQueryProcessor implements QueryProcessingEngine {
 				 * it's data type. To find the dataType by the field value, we will use
 				 * getDataType() method of DataTypeDefinitions class
 				 */
-				RowDataTypeDefinitions rowDataTypeDefinitionsMap = null;
+				RowDataTypeDefinitions rowDataTypeDefMap = null;
 				if (null != data) {
-					rowDataTypeDefinitionsMap = new RowDataTypeDefinitions();
+					rowDataTypeDefMap = new RowDataTypeDefinitions();
 					for (int i = 0; i < data.length; i++) {
-						rowDataTypeDefinitionsMap.put(i + 1, data[i]);
+						rowDataTypeDefMap.put(i + 1, data[i]);
 					}
 				}
 
@@ -122,7 +128,7 @@ public class CsvQueryProcessor implements QueryProcessingEngine {
 						 * will continue all the fields of the row. Please note that fields might
 						 * contain spaces in between. Also, few fields might be empty.
 						 */
-						String[] dataValue = line.split(",", -1);
+						final String[] dataValue = line.split(",", -1);
 						if (null != dataValue && null != header) {
 							int index = 0;
 							rowMap = new Row();
@@ -149,16 +155,19 @@ public class CsvQueryProcessor implements QueryProcessingEngine {
 		return dataSetMap;
 	}
 
-	/*
+	/**
 	 * Method to loop through data part of fle to determne it's dataType.
 	 * 
 	 */
 	public String[] getColumnType(String[] data) {
 		List<String> dataTypes = new ArrayList<String>();
 		if (null != data) {
-			final DataTypeDefinitions dataTypeDefinitions = new DataTypeDefinitions();
-			for (String string : data) {
-				dataTypes.add(dataTypeDefinitions.getDataType(string).toString().split("class ")[1]);
+			final DataTypeDefinitions dataTypeDef = new DataTypeDefinitions();
+			String dataTypeString = null;
+			for (final String string : data) {
+				dataTypeString = dataTypeDef.getDataType(string);
+				dataTypeString = dataTypeString.split("class ")[1];
+				dataTypes.add(dataTypeString);
 			}
 			return dataTypes.toArray(new String[dataTypes.size()]);
 		}
